@@ -323,7 +323,7 @@ function wp_default_scripts( &$scripts ) {
 
 		$scripts->add( 'theme-preview', "/wp-admin/js/theme-preview$suffix.js", array( 'thickbox', 'jquery' ), '20100407', 1 );
 
-		$scripts->add( 'inline-edit-post', "/wp-admin/js/inline-edit-post$suffix.js", array( 'jquery', 'suggest' ), '20110609', 1 );
+		$scripts->add( 'inline-edit-post', "/wp-admin/js/inline-edit-post$suffix.js", array( 'jquery', 'suggest' ), '20110919', 1 );
 		$scripts->add_script_data( 'inline-edit-post', 'inlineEditL10n', array(
 			'error' => __('Error while saving the changes.'),
 			'ntdeltitle' => __('Remove From Bulk Edit'),
@@ -408,7 +408,7 @@ function wp_default_styles( &$styles ) {
 
 	$styles->add( 'wp-admin', "/wp-admin/css/wp-admin$suffix.css", array(), '20110918a' );
 
-	$styles->add( 'ie', "/wp-admin/css/ie$suffix.css", array('wp-admin'), '20110902' );
+	$styles->add( 'ie', "/wp-admin/css/ie$suffix.css", array(), '20110902' );
 	$styles->add_data( 'ie', 'conditional', 'lte IE 7' );
 
 	// all colors stylesheets need to have the same query strings (cache manifest compat)

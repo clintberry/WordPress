@@ -191,16 +191,11 @@ function edit_post( $post_data = null ) {
 	}
 
 	// Post Formats
-	if ( current_theme_supports( 'post-formats' ) && isset( $post_data['post_format'] ) ) {
-		$formats = get_theme_support( 'post-formats' );
-		if ( is_array( $formats ) ) {
-			$formats = $formats[0];
-			if ( in_array( $post_data['post_format'], $formats ) ) {
-				set_post_format( $post_ID, $post_data['post_format'] );
-			} elseif ( '0' == $post_data['post_format'] ) {
-				set_post_format( $post_ID, false );
-			}
-		}
+	if ( isset( $post_data['post_format'] ) ) {
+		if ( current_theme_supports( 'post-formats', $post_data['post_format'] ) )
+			set_post_format( $post_ID, $post_data['post_format'] );
+		elseif ( '0' == $post_data['post_format'] )
+			set_post_format( $post_ID, false );
 	}
 
 	// Meta Stuff
@@ -312,9 +307,9 @@ function bulk_edit_posts( $post_data = null ) {
 		foreach ( $post_data['tax_input'] as $tax_name => $terms ) {
 			if ( empty($terms) )
 				continue;
-			if ( is_taxonomy_hierarchical( $tax_name ) )
+			if ( is_taxonomy_hierarchical( $tax_name ) ) {
 				$tax_input[$tax_name] = array_map( 'absint', $terms );
-			else {
+			} else {
 				$tax_input[$tax_name] = preg_replace( '/\s*,\s*/', ',', rtrim( trim($terms), ' ,' ) );
 				$tax_input[$tax_name] = explode(',', $tax_input[$tax_name]);
 			}
@@ -335,6 +330,14 @@ function bulk_edit_posts( $post_data = null ) {
 				}
 			}
 		}
+	}
+
+	if ( isset( $post_data['post_format'] ) ) {
+		if ( '0' == $post_data['post_format'] )
+			$post_data['post_format'] = false;
+		// don't change the post format if it's not supported or not '0' (standard)
+		elseif ( ! current_theme_supports( 'post-formats', $post_data['post_format'] ) )
+			unset( $post_data['post_format'] );
 	}
 
 	$updated = $skipped = $locked = array();
@@ -387,6 +390,8 @@ function bulk_edit_posts( $post_data = null ) {
 				unstick_post( $post_ID );
 		}
 
+		if ( isset( $post_data['post_format'] ) )
+			set_post_format( $post_ID, $post_data['post_format'] );
 	}
 
 	return array( 'updated' => $updated, 'skipped' => $skipped, 'locked' => $locked );
