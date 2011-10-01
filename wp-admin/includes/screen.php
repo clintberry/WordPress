@@ -236,11 +236,6 @@ function convert_to_screen( $screen ) {
 	return $screen;
 }
 
-function screen_meta( $screen ) {
-	$current_screen = get_current_screen();
-	$current_screen->render_screen_meta();
-}
-
 /**
  * Add contextual help text for a page.
  *
@@ -266,24 +261,6 @@ function add_contextual_help($screen, $help) {
 }
 
 /**
- * Returns the screen layout options.
- *
- * @todo: deprecate?
- */
-function screen_layout($screen) {
-	$current_screen = get_current_screen();
-
-	if ( ! $current_screen )
-		return '';
-
-	ob_start();
-	$current_screen->render_screen_layout();
-	$screen_layout = ob_get_clean();
-
-	return $screen_layout;
-}
-
-/**
  * Register and configure an admin screen option
  *
  * @since 3.1.0
@@ -299,25 +276,6 @@ function add_screen_option( $option, $args = array() ) {
 		return;
 
 	return $current_screen->add_option( $option, $args );
-}
-
-
-/**
- * Returns the screen's per-page options.
- *
- * @todo: deprecate?
- */
-function screen_options($screen) {
-	$current_screen = get_current_screen();
-
-	if ( ! $current_screen )
-		return '';
-
-	ob_start();
-	$current_screen->render_per_page_options();
-	$per_page_options = ob_get_clean();
-
-	return $per_page_options;
 }
 
 function screen_icon( $screen = '' ) {
@@ -400,7 +358,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $action = '';
 
@@ -410,7 +368,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $base;
 
@@ -419,7 +377,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $id;
 
@@ -428,7 +386,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var bool
-	 * @access private
+	 * @access public
 	 */
 	public $is_network;
 
@@ -437,7 +395,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var bool
-	 * @access private
+	 * @access public
 	 */
 	public $is_user;
 
@@ -448,7 +406,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $parent_base;
 
@@ -458,7 +416,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $parent_file;
 
@@ -468,7 +426,7 @@ final class WP_Screen {
 	 *
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $post_type;
 
@@ -477,7 +435,7 @@ final class WP_Screen {
 	 * The 'edit-tags.php?taxonomy=category' screen has a taxonomy of 'category'.
 	 * @since 3.3.0
 	 * @var string
-	 * @access private
+	 * @access public
 	 */
 	public $taxonomy;
 
@@ -488,7 +446,7 @@ final class WP_Screen {
 	 * @var array
 	 * @access private
 	 */
-	public $help_tabs = array();
+	private $_help_tabs = array();
 
 	/**
 	 * The help sidebar data associated with the screen, if any.
@@ -497,7 +455,7 @@ final class WP_Screen {
 	 * @var string
 	 * @access private
 	 */
-	public $help_sidebar = '';
+	private $_help_sidebar = '';
 
 	/**
 	 * The screen options associated with the screen, if any.
@@ -506,7 +464,7 @@ final class WP_Screen {
 	 * @var array
 	 * @access private
 	 */
-	public $options = array();
+	private $_options = array();
 
 
 	/**
@@ -621,7 +579,7 @@ final class WP_Screen {
 	 * @param array $args Associative array of arguments particular to the given $option.
 	 */
 	public function add_option( $option, $args = array() ) {
-		$this->options[ $option ] = $args;
+		$this->_options[ $option ] = $args;
 	}
 
 	/**
@@ -654,7 +612,7 @@ final class WP_Screen {
 		if ( ! $args['id'] )
 			$args['id'] = sanitize_html_class( $args['title'] );
 
-		$this->help_tabs[] = $args;
+		$this->_help_tabs[] = $args;
 	}
 
 	/**
@@ -666,7 +624,7 @@ final class WP_Screen {
 	 * @param string $content Sidebar content in plain text or HTML.
 	 */
 	public function add_help_sidebar( $content ) {
-		$this->help_sidebar = $content;
+		$this->_help_sidebar = $content;
 	}
 
 	/**
@@ -707,7 +665,7 @@ final class WP_Screen {
 		<div id="screen-meta" class='metabox-prefs'>
 			<div id="contextual-help-wrap" class="hidden">
 				<ul class="contextual-help-tabs">
-					<?php foreach ( $this->help_tabs as $i => $tab ):
+					<?php foreach ( $this->_help_tabs as $i => $tab ):
 						$link_id  = "tab-link-{$tab['id']}";
 						$panel_id = "tab-panel-{$tab['id']}";
 						$classes  = ( $i == 0 ) ? 'active' : '';
@@ -722,11 +680,11 @@ final class WP_Screen {
 				</ul>
 
 				<div class="contextual-help-sidebar">
-					<?php echo $this->help_sidebar; ?>
+					<?php echo $this->_help_sidebar; ?>
 				</div>
 
 				<div class="contextual-help-tabs-wrap">
-					<?php foreach ( $this->help_tabs as $i => $tab ):
+					<?php foreach ( $this->_help_tabs as $i => $tab ):
 						$panel_id = "tab-panel-{$tab['id']}";
 						$classes  = ( $i == 0 ) ? 'active' : '';
 						$classes .= ' help-tab-content';
@@ -763,7 +721,7 @@ final class WP_Screen {
 			$show_screen = true;
 
 		// Check if there are per-page options.
-		$show_screen = $show_screen || isset( $this->options['per_page'] );
+		$show_screen = $show_screen || isset( $this->_options['per_page'] );
 
 		$this->_screen_settings = apply_filters( 'screen_settings', '', $this );
 
@@ -777,7 +735,7 @@ final class WP_Screen {
 		if ( ! empty( $this->_screen_settings ) )
 			$show_screen = true;
 
-		if ( ! empty( $this->options ) )
+		if ( ! empty( $this->_options ) )
 			$show_screen = true;
 
 		$this->_show_screen_options = apply_filters( 'screen_options_show_screen', $show_screen, $this );
@@ -848,17 +806,17 @@ final class WP_Screen {
 		if ( ! empty( $columns ) && isset( $columns[ $this->id ] ) )
 			add_screen_option( 'layout_columns', array('max' => $columns[ $this->id ] ) );
 
-		if ( ! isset( $this->options['layout_columns'] ) ) {
+		if ( ! isset( $this->_options['layout_columns'] ) ) {
 			$screen_layout_columns = 0;
 			return;
 		}
 
 		$screen_layout_columns = get_user_option("screen_layout_$this->id");
-		$num = $this->options['layout_columns']['max'];
+		$num = $this->_options['layout_columns']['max'];
 
 		if ( ! $screen_layout_columns ) {
-			if ( isset( $this->options['layout_columns']['default'] ) )
-				$screen_layout_columns = $this->options['layout_columns']['default'];
+			if ( isset( $this->_options['layout_columns']['default'] ) )
+				$screen_layout_columns = $this->_options['layout_columns']['default'];
 			else
 				$screen_layout_columns = 'auto';
 		}
@@ -886,21 +844,21 @@ final class WP_Screen {
 	}
 
 	function render_per_page_options() {
-		if ( ! isset( $this->options['per_page'] ) )
+		if ( ! isset( $this->_options['per_page'] ) )
 			return;
 
-		$per_page_label = $this->options['per_page']['label'];
+		$per_page_label = $this->_options['per_page']['label'];
 
-		if ( empty( $this->options['per_page']['option'] ) ) {
+		if ( empty( $this->_options['per_page']['option'] ) ) {
 			$option = str_replace( '-', '_', "{$this->id}_per_page" );
 		} else {
-			$option = $this->options['per_page']['option'];
+			$option = $this->_options['per_page']['option'];
 		}
 
 		$per_page = (int) get_user_option( $option );
 		if ( empty( $per_page ) || $per_page < 1 ) {
-			if ( isset($this->options['per_page']['default']) )
-				$per_page = $this->options['per_page']['default'];
+			if ( isset($this->_options['per_page']['default']) )
+				$per_page = $this->_options['per_page']['default'];
 			else
 				$per_page = 20;
 		}
