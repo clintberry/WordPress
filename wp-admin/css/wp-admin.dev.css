@@ -13,9 +13,8 @@ TABLE OF CONTENTS:
  4.0 - Notifications
  5.0 - TinyMCE
  6.0 - Admin Header
-	6.1 - Favorites Menu
-	6.2 - Screen Options Tabs
-	6.3 - Help Menu
+	6.1 - Screen Options Tabs
+	6.2 - Help Menu
  7.0 - Main Navigation
  8.0 - Layout Blocks
  9.0 - Dashboard
@@ -140,13 +139,7 @@ TABLE OF CONTENTS:
 }
 
 #post-body-content {
-	max-width: 850px;
 	min-width: 465px;
-}
-
-.columns-1 #post-body-content,
-.columns-2 #post-body-content {
-	max-width: none;
 }
 
 #post-body-content #side-sortables.empty-container {
@@ -704,7 +697,6 @@ a.rsswidget,
 .tablenav .displaying-num,
 .welcome-panel h3,
 .widefat th,
-#wphead h1,
 .quicktags,
 .search {
 	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
@@ -762,7 +754,6 @@ p.install-help {
 .wp-admin select {
 	padding: 2px;
 	height: 2em;
-	max-width: 100%;
 }
 
 .wp-admin select[multiple] {
@@ -1349,113 +1340,15 @@ form.upgrade .hint {
 /*------------------------------------------------------------------------------
   6.0 - Admin Header
 ------------------------------------------------------------------------------*/
-#wphead {
-	height: 32px;
-	margin-right: 20px;
-	margin-left: 2px;
-}
-
-#wphead a,
 #adminmenu a,
 #sidemenu a,
 #taglist a,
-#catlist a,
-#wphead h1 a:hover {
+#catlist a {
 	text-decoration: none;
 }
 
-#wphead h1 a:hover #site-title {
-	text-decoration:underline;
-}
-
-#header-logo {
-	float: left;
-	margin: 7px 0;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
-}
-
-#wphead h1 {
-	font-style: normal;
-	font-size: 16px;
-	padding: 6px 8px 5px;
-	margin: 0;
-	float: left;
-}
-
-
 /*------------------------------------------------------------------------------
-  6.1 - Favorites Menu
-------------------------------------------------------------------------------*/
-
-#favorite-actions {
-	margin: 0 12px 0 15px;
-	min-width: 130px;
-	position: relative;
-	display: inline-block;
-	top: -1px;
-}
-
-#favorite-first {
-	-webkit-border-radius: 12px;
-	border-radius: 12px;
-	line-height: 15px;
-	padding: 0 30px 0 0;
-	border-width: 1px;
-	border-style: solid;
-}
-
-#favorite-inside {
-	margin: 0;
-	padding: 2px 1px;
-	border-width: 1px;
-	border-style: solid;
-	position: absolute;
-	z-index: 11;
-	display: none;
-	-webkit-border-bottom-right-radius: 12px;
-	-webkit-border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
-	border-bottom-left-radius: 12px;
-}
-
-#favorite-first a {
-	padding: 2px 0 2px 12px;
-}
-
-#favorite-actions a {
-	display: block;
-	text-decoration: none;
-	font-size: 11px;
-}
-
-#favorite-inside a {
-	padding: 3px 5px 3px 10px;
-	line-height: 20px;
-}
-
-#favorite-toggle {
-	height: 18px;
-	position: absolute;
-	right: 0;
-	top: 1px;
-	width: 28px;
-	border-width: 0 0 0 1px;
-	border-style: solid;
-}
-
-#favorite-actions .slide-down {
-	-webkit-border-bottom-right-radius: 0;
-	-webkit-border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-	border-bottom: none;
-}
-
-
-/*------------------------------------------------------------------------------
-  6.2 - Screen Options Tabs
+  6.1 - Screen Options Tabs
 ------------------------------------------------------------------------------*/
 
 #screen-meta {
@@ -1519,7 +1412,7 @@ form.upgrade .hint {
 }
 
 /*------------------------------------------------------------------------------
-  6.3 - Help Menu
+  6.2 - Help Menu
 ------------------------------------------------------------------------------*/
 
 #contextual-help-back {
@@ -1818,6 +1711,7 @@ body.no-js #adminmenu .wp-menu-toggle,
 #adminmenu li.wp-not-current-submenu:hover .wp-menu-arrow {
 	display: block;
 }
+
 .folded #adminmenu li.wp-not-current-submenu:hover .wp-menu-arrow {
 	display: none;
 }
@@ -2178,6 +2072,11 @@ body.admin-bar #adminmenu {
 .stuffbox .inside {
 	padding: 0 10px;
 	line-height: 1.4em;
+}
+
+.postbox .inside {
+	margin: 10px 0;
+	position: relative;
 }
 
 .postbox.closed h3 {
@@ -2802,7 +2701,6 @@ table .inline-edit-row fieldset ul.cat-hover {
 #poststuff #titlewrap {
 	border: 0;
 	padding: 0;
-
 }
 
 #titlediv #title {
@@ -2907,10 +2805,6 @@ input#link_url {
 /* Post Screen */
 #post-body #normal-sortables {
 	min-height: 50px;
-}
-
-#post-body #advanced-sortables {
-	min-height: 20px;
 }
 
 .postbox {
@@ -5109,11 +5003,6 @@ form .textarea-wrap {
 	min-width: 0;
 }
 
-div.postbox div.inside {
-	margin: 10px 0;
-	position: relative;
-}
-
 #dashboard-widgets a {
 	text-decoration: none;
 }
@@ -6489,6 +6378,22 @@ img {
 	user-select: none;
 }
 
+.press-this #wphead h1 {
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 32px;
+	margin: 0;
+	float: left;
+}
+
+.press-this #wphead h1 a {
+	text-decoration: none;
+}
+
+.press-this #wphead h1 a:hover {
+	text-decoration: underline;
+}
+
 .press-this-sidebar {
 	float: right;
 	width: 200px;
@@ -6500,19 +6405,6 @@ img {
 	-webkit-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
-}
-
-.press-this #wphead h1 {
-	padding: 6px 0 0;
-	font-weight: normal;
-}
-
-.press-this #wphead h1 a {
-	text-decoration: none;
-}
-
-.press-this #wphead h1 a:hover {
-	text-decoration: underline;
 }
 
 .press-this .tagchecklist span a {
