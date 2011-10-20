@@ -314,9 +314,9 @@ function url_to_postid($url) {
 
 		if ( preg_match("!^$match!", $request_match, $matches) ) {
 
-			if ( $wp_rewrite->use_verbose_page_rules && preg_match( '/pagename=\$([^&\[]+)\[([0-9]+)\]/', $query, $varmatch ) ) {
+			if ( $wp_rewrite->use_verbose_page_rules && preg_match( '/pagename=\$matches\[([0-9]+)\]/', $query, $varmatch ) ) {
 				// this is a verbose page match, lets check to be sure about it
-				if ( ! get_page_by_path( ${$varmatch[1]}[$varmatch[2]] ) )
+				if ( ! get_page_by_path( $matches[ $varmatch[1] ] ) )
 					continue;
 			}
 
@@ -1739,7 +1739,7 @@ class WP_Rewrite {
 				</rule>
 				<rule name="wordpress - Rule 5" stopProcessing="true">
 					<match url="^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*)" ignoreCase="false" />
-					<action type="Rewrite" url="{R:2}" />
+					<action type="Rewrite" url="{R:1}" />
 				</rule>
 				<rule name="wordpress - Rule 6" stopProcessing="true">
 					<match url="^([_0-9a-zA-Z-]+/)?(.*\.php)$" ignoreCase="false" />
